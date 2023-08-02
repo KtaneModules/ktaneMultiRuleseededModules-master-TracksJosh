@@ -1,0 +1,10 @@
+{
+  "name": "multiRuleseededModules-Editor",
+  "references": [
+    "multiRuleseededModules"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}

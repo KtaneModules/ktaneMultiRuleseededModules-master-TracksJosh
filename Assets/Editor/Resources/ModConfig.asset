@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615501dbe4f3fe94fbf4b564abb10237, type: 3}
+  m_Name: ModConfig
+  m_EditorClassIdentifier: 
+  id: multiRuleseededModules
+  title: Multi-Ruleseeded Modules
+  author: TracksJosh
+  description: 'Who knew a few modules can support a multitool!
+
+
+    New World (newWorld) I swear I was just here before...
+
+    Manual: ktane.timwi.de/HTML/New%20World.html
+
+
+    Backdoor Keypad (backdoorKeypad) But when Hunger comes to rap rat-a-tat rat-a-tat
+    at the window, "At the window!" Who''s there? "Hunger" Oh, Hunger!
+
+    Manual: ktane.timwi.de/HTML/Backdoor%20Keypad.html
+
+
+    Simon Steps (simonSteps) I''m stepping away from this. Too many Simons on this
+    trail.
+
+    Manual: ktane.timwi.de/HTML/Simon%20Steps.html
+
+
+    New World has Twitch Plays, nothing else. You''re welcome :)'
+  version: 1.0
+  outputFolder: build
+  previewImage: {fileID: 2800000, guid: b3b1d3f43e30631449947bffd2a8803b, type: 3}
