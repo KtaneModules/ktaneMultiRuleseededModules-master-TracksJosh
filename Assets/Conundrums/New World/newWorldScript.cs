@@ -382,23 +382,27 @@ public class newWorldScript : MonoBehaviour {
 
         if (twitchInput.Equals("ready"))
         {
+            if (ready)
+            {
+                yield return "sendtochaterror You have activated the maze!";
+            }
             ReleaseMaze();
-            yield break;
+            yield return null;
         }
-
+        if (!ready && (twitchInput.StartsWith("move ") || twitchInput.StartsWith("press ") || twitchInput.StartsWith("submit ")))
+        {
+            yield return "sendtochaterror You have not activated the maze yet!";
+        }
         if (twitchInput.Equals("reset") || twitchInput.Equals("press reset"))
         {
             yourX = saveX;
             yourY = saveY;
             Squares[yourY * 6 + yourX].SetActive(true);
             Triangles[goalY * 6 + goalX].SetActive(true);
-            yield break;
+            yield return null;
         }
 
-        if (!ready)
-        {
-            yield return "sendtochaterror You have not activated the maze yet!";
-        }
+        
         
         if (twitchInput.StartsWith("move ") || twitchInput.StartsWith("press ") || twitchInput.StartsWith("submit "))
         {
@@ -430,7 +434,7 @@ public class newWorldScript : MonoBehaviour {
                 }
             }
         }
-        yield break;
+        yield return null;
 
     }
 
