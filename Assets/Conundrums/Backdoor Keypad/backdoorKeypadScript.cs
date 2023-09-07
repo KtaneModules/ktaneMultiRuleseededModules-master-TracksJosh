@@ -446,6 +446,116 @@ public class backdoorKeypadScript : MonoBehaviour
 
     }
 
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        if (!completeStage1)
+        {
+            if (!stage1)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (TwoXTwo[i].GetComponentInChildren<TextMesh>().color != Color.white)
+                    {
+                        TwoXTwo[i].OnInteract();
+                        yield return new WaitForSeconds(0.1f);
+                        if (stage1)
+                            break;
+                    }
+                }
+            }
+            while (true)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (TwoXTwo[i].GetComponentInChildren<TextMesh>().color != Color.white && TwoXTwo[i].GetComponentInChildren<TextMesh>().text == charList[resultLists[column][keyLab[Array.IndexOf(keyPos, stage1Counter)]]].ToString())
+                    {
+                        TwoXTwo[i].OnInteract();
+                        yield return new WaitForSeconds(0.1f);
+                        if (completeStage1)
+                            goto leave;
+                    }
+                }
+            }
+        }
+        leave:
+        if (!stage2)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                if (TwoXTwo[i].GetComponentInChildren<TextMesh>().color != Color.white)
+                {
+                    TwoXTwo[i].OnInteract();
+                    yield return new WaitForSeconds(0.1f);
+                    if (stage2)
+                        break;
+                }
+            }
+        }
+        for (int i = 0; i < 16; i++)
+        {
+            if (FourXFour[i].GetComponentInChildren<TextMesh>().color != Color.white)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    if (FourXFour[i].GetComponentInChildren<TextMesh>().text == charList2[secondStageList[j]].ToString())
+                    {
+                        FourXFour[i].OnInteract();
+                        yield return new WaitForSeconds(0.1f);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private string TwitchHelpMessage = "!{0} press <#> [Presses button '#' in reading order] | Presses are chainable with spaces";
+
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        string[] parameters = command.Split(' ');
+        if (parameters[0].EqualsIgnoreCase("press"))
+        {
+            if (parameters.Length == 1)
+            {
+                yield return "sendtochaterror Please specify at least one button to press!";
+                yield break;
+            }
+            else
+            {
+                for (int i = 1; i < parameters.Length; i++)
+                {
+                    int temp = -1;
+                    if (!int.TryParse(parameters[i], out temp))
+                    {
+                        yield return "sendtochaterror!f The specified button '" + parameters[i] + "' is invalid!";
+                        yield break;
+                    }
+                    if ((!stage2 && (temp < 1 || temp > 4)) || (stage2 && (temp < 1 || temp > 16)))
+                    {
+                        yield return "sendtochaterror The specified button '" + parameters[i] + "' is invalid!";
+                        yield break;
+                    }
+                }
+                yield return null;
+                int[] stage2Positions = { 0, 1, 4, 5, 2, 3, 6, 7, 8, 9, 12, 13, 10, 11, 14, 15 };
+                KMSelectable moduleSelectable = GetComponent<KMSelectable>();
+                for (int i = 1; i < parameters.Length; i++)
+                {
+                    if (!stage2)
+                    {
+                        TwoXTwo[int.Parse(parameters[i]) - 1].OnInteract();
+                        yield return new WaitForSeconds(0.1f);
+                    }
+                    else
+                    {
+                        moduleSelectable.Children[stage2Positions[int.Parse(parameters[i]) - 1] + 4].OnInteract();
+                        yield return new WaitForSeconds(0.1f);
+                    }
+                }
+            }
+        }
+    }
+
     public class MonoRandomBackdoorKeypad
     {
 
