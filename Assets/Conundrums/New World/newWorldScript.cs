@@ -364,14 +364,55 @@ public class newWorldScript : MonoBehaviour {
         yield return new WaitForSecondsRealtime(0.5f);
         cycle = false;
     }
-    IEnumerator TwitchHandleForcedSolves()
+
+    IEnumerator TwitchHandleForcedSolve()
     {
         if (!ready)
         {
-            ReleaseMaze();
+            Ready.OnInteract();
             yield return new WaitForSeconds(0.1f);
         }
+        var q = new Queue<int[]>();
+        var allMoves = new List<Movement>();
+        var startPoint = new int[] { yourX, yourY };
+        var target = new int[] { goalX, goalY };
+        q.Enqueue(startPoint);
+        while (q.Count > 0)
+        {
+            var next = q.Dequeue();
+            if (next[0] == target[0] && next[1] == target[1])
+                goto readyToSubmit;
+            string paths = Maze[next[1], next[0]];
+            var cell = paths.Replace(" ", "");
+            var allDirections = "ULRD";
+            var offsets = new int[,] { { 0, -1 }, { -1, 0 }, { 1, 0 }, { 0, 1 } };
+            for (int i = 0; i < 4; i++)
+            {
+                var check = new int[] { next[0] + offsets[i, 0], next[1] + offsets[i, 1] };
+                if (!cell.Contains(allDirections[i]) && !allMoves.Any(x => x.start[0] == check[0] && x.start[1] == check[1]))
+                {
+                    q.Enqueue(new int[] { next[0] + offsets[i, 0], next[1] + offsets[i, 1] });
+                    allMoves.Add(new Movement { start = next, end = new int[] { next[0] + offsets[i, 0], next[1] + offsets[i, 1] }, direction = i });
+                }
+            }
+        }
+        throw new InvalidOperationException("There is a bug in New World's TP autosolver.");
+        readyToSubmit:
+        KMSelectable[] buttons = new KMSelectable[] { UpButton, LeftButton, RightButton, DownButton };
+        var lastMove = allMoves.First(x => x.end[0] == target[0] && x.end[1] == target[1]);
+        var relevantMoves = new List<Movement> { lastMove };
+        while (lastMove.start != startPoint)
+        {
+            lastMove = allMoves.First(x => x.end[0] == lastMove.start[0] && x.end[1] == lastMove.start[1]);
+            relevantMoves.Add(lastMove);
+        }
+        for (int i = 0; i < relevantMoves.Count; i++)
+        {
+            buttons[relevantMoves[relevantMoves.Count - 1 - i].direction].OnInteract();
+            yield return new WaitForSeconds(.1f);
+        }
     }
+
     private string TwitchHelpMessage = "Use !{0} ready to activate the maze. Use !{0} move/press/submit uldr to move up, left, down, and right. Use !{0} reset or !{0} press reset to reset back to the start.";
 
     IEnumerator ProcessTwitchCommand(string input)
@@ -386,8 +427,8 @@ public class newWorldScript : MonoBehaviour {
             {
                 yield return "sendtochaterror You have activated the maze!";
             }
-            ReleaseMaze();
             yield return null;
+            ReleaseMaze();
         }
         if (!ready && (twitchInput.StartsWith("move ") || twitchInput.StartsWith("press ") || twitchInput.StartsWith("submit ")))
         {
@@ -395,15 +436,15 @@ public class newWorldScript : MonoBehaviour {
         }
         if (twitchInput.Equals("reset") || twitchInput.Equals("press reset"))
         {
+            yield return null;
             yourX = saveX;
             yourY = saveY;
             Squares[yourY * 6 + yourX].SetActive(true);
             Triangles[goalY * 6 + goalX].SetActive(true);
-            yield return null;
         }
 
-        
-        
+
+        yield return null;
         if (twitchInput.StartsWith("move ") || twitchInput.StartsWith("press ") || twitchInput.StartsWith("submit "))
         {
             twitchInput = twitchInput.Substring(twitchInput.IndexOf(" ", System.StringComparison.Ordinal) + 1);
@@ -434,11 +475,15 @@ public class newWorldScript : MonoBehaviour {
                 }
             }
         }
-        yield return null;
 
     }
 
-    
+    class Movement
+    {
+        public int[] start;
+        public int[] end;
+        public int direction;
+    }
 
     public class MonoRandomNewWorld
     {

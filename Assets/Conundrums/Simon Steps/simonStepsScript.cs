@@ -89,9 +89,11 @@ public class simonStepsScript : MonoBehaviour {
             stageColors[stage][c] = i;
             c++;
         }
+        float scalar = transform.lossyScale.x;
         foreach(Light light in Lights)
         {
             light.gameObject.SetActive(false);
+            light.range *= scalar;
         }
         foreach (TextMesh text in Digits)
         {
@@ -260,7 +262,8 @@ public class simonStepsScript : MonoBehaviour {
 
     void OnDestroy()
     {
-        audioReference.StopSound();
+        if (audioReference != null)
+            audioReference.StopSound();
     }
 
     private void generateRule(int flashCount)
@@ -429,6 +432,66 @@ public class simonStepsScript : MonoBehaviour {
         }
         StartSubmit();
         yield return null;
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        int start = stage;
+        for (int i = start; i < 4; i++)
+        {
+            if (!ready)
+                Sections[0].OnInteract();
+            while (!submit) yield return true;
+            int start2 = stageCounter;
+            int end = stage + 1;
+            for (int k = start2; k < end; k++)
+            {
+                int start3 = pressCounter;
+                for (int j = start3; j < stageInputs[stage][stages[stage][k]].Length; j++)
+                {
+                    Sections[Array.IndexOf(direction, stageInputs[stage][stages[stage][k]][j].ToString())].OnInteract();
+                    yield return new WaitForSeconds(0.2f);
+                }
+            }
+        }
+    }
+
+    private string TwitchHelpMessage = "!{0} press <u/l/d/r> [Presses the up, left, down, or right button] | Presses are chainable with or without spaces";
+
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        string[] parameters = command.Split(' ');
+        if (parameters[0].EqualsIgnoreCase("press"))
+        {
+            if (parameters.Length == 1)
+            {
+                yield return "sendtochaterror Please specify at least one button to press!";
+                yield break;
+            }
+            else
+            {
+                for (int i = 1; i < parameters.Length; i++)
+                {
+                    for (int j = 0; j < parameters[i].Length; j++)
+                    {
+                        if (!"URDL".Contains(parameters[i][j].ToString().ToUpper()))
+                        {
+                            yield return "sendtochaterror!f The specified button '" + parameters[i][j] + "' is invalid!";
+                            yield break;
+                        }
+                    }
+                }
+                yield return null;
+                for (int i = 1; i < parameters.Length; i++)
+                {
+                    for (int j = 0; j < parameters[i].Length; j++)
+                    {
+                        Sections["URDL".IndexOf(parameters[i][j].ToString().ToUpper())].OnInteract();
+                        yield return new WaitForSeconds(0.2f);
+                    }
+                }
+            }
+        }
     }
 
     public class MonoRandomSimonSteps
