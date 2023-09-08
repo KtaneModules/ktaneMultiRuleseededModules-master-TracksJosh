@@ -35,6 +35,6 @@ MonoBehaviour:
 
 
     New World has Twitch Plays, nothing else. You''re welcome :)'
-  version: 1.0001
+  version: 1.1
   outputFolder: build
   previewImage: {fileID: 2800000, guid: b3b1d3f43e30631449947bffd2a8803b, type: 3}
