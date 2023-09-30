@@ -93,7 +93,7 @@ public class simonStepsScript : MonoBehaviour {
         foreach(Light light in Lights)
         {
             light.gameObject.SetActive(false);
-            light.range *= scalar;
+            light.range *= scalar * 0.5f;
         }
         foreach (TextMesh text in Digits)
         {
