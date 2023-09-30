@@ -131,23 +131,26 @@ public class newWorldScript : MonoBehaviour {
     {
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
         UpButton.AddInteractionPunch(0.5f);
-        Squares[yourY * 6 + yourX].SetActive(false);
-        Triangles[goalY * 6 + goalX].SetActive(false);
-        if (Maze[yourY, yourX].Contains('U'))
+        if (!_isSolved)
         {
-            BombModule.HandleStrike();
-            Squares[yourY * 6 + yourX].SetActive(true);
-            Triangles[goalY * 6 + goalX].SetActive(true);
-        }
-        else
-        {
-            yourY--;
-        }
-        if (yourX == goalX && yourY == goalY)
-        {
-            Audio.PlaySoundAtTransform("pew", transform);
-            _isSolved = true;
-            BombModule.HandlePass();
+            Squares[yourY * 6 + yourX].SetActive(false);
+            Triangles[goalY * 6 + goalX].SetActive(false);
+            if (Maze[yourY, yourX].Contains('U'))
+            {
+                BombModule.HandleStrike();
+                Squares[yourY * 6 + yourX].SetActive(true);
+                Triangles[goalY * 6 + goalX].SetActive(true);
+            }
+            else
+            {
+                yourY--;
+            }
+            if (yourX == goalX && yourY == goalY)
+            {
+                Audio.PlaySoundAtTransform("pew", transform);
+                _isSolved = true;
+                BombModule.HandlePass();
+            }
         }
     }
     private void Down()
@@ -156,21 +159,24 @@ public class newWorldScript : MonoBehaviour {
         DownButton.AddInteractionPunch(0.5f);
         Squares[yourY * 6 + yourX].SetActive(false);
         Triangles[goalY * 6 + goalX].SetActive(false);
-        if (Maze[yourY, yourX].Contains('D'))
+        if (!_isSolved)
         {
-            BombModule.HandleStrike();
-            Squares[yourY * 6 + yourX].SetActive(true);
-            Triangles[goalY * 6 + goalX].SetActive(true);
-        }
-        else
-        {
-            yourY++;
-        }
-        if (yourX == goalX && yourY == goalY)
-        {
-            Audio.PlaySoundAtTransform("pew", transform);
-            _isSolved = true;
-            BombModule.HandlePass();
+            if (Maze[yourY, yourX].Contains('D'))
+            {
+                BombModule.HandleStrike();
+                Squares[yourY * 6 + yourX].SetActive(true);
+                Triangles[goalY * 6 + goalX].SetActive(true);
+            }
+            else
+            {
+                yourY++;
+            }
+            if (yourX == goalX && yourY == goalY)
+            {
+                Audio.PlaySoundAtTransform("pew", transform);
+                _isSolved = true;
+                BombModule.HandlePass();
+            }
         }
     }
     private void Left()
@@ -179,22 +185,26 @@ public class newWorldScript : MonoBehaviour {
         LeftButton.AddInteractionPunch(0.5f);
         Squares[yourY * 6 + yourX].SetActive(false);
         Triangles[goalY * 6 + goalX].SetActive(false);
-        if (Maze[yourY, yourX].Contains('L'))
+        if (!_isSolved)
         {
-            BombModule.HandleStrike();
-            Squares[yourY * 6 + yourX].SetActive(true);
-            Triangles[goalY * 6 + goalX].SetActive(true);
+            if (Maze[yourY, yourX].Contains('L'))
+            {
+                BombModule.HandleStrike();
+                Squares[yourY * 6 + yourX].SetActive(true);
+                Triangles[goalY * 6 + goalX].SetActive(true);
+            }
+            else
+            {
+                yourX--;
+            }
+            if (yourX == goalX && yourY == goalY)
+            {
+                Audio.PlaySoundAtTransform("pew", transform);
+                _isSolved = true;
+                BombModule.HandlePass();
+            }
         }
-        else
-        {
-            yourX--;
-        }
-        if (yourX == goalX && yourY == goalY)
-        {
-            Audio.PlaySoundAtTransform("pew", transform);
-            _isSolved = true;
-            BombModule.HandlePass();
-        }
+        
     }
     private void Right()
     {
@@ -202,22 +212,25 @@ public class newWorldScript : MonoBehaviour {
         RightButton.AddInteractionPunch(0.5f);
         Squares[yourY * 6 + yourX].SetActive(false);
         Triangles[goalY * 6 + goalX].SetActive(false);
-        if (Maze[yourY, yourX].Contains('R'))
+        if (!_isSolved)
         {
-            BombModule.HandleStrike();
-            Squares[yourY * 6 + yourX].SetActive(true);
-            Triangles[goalY * 6 + goalX].SetActive(true);
-            
-        }
-        else
-        {
-            yourX++;
-        }
-        if(yourX == goalX && yourY == goalY)
-        {
-            Audio.PlaySoundAtTransform("pew", transform);
-            _isSolved = true;
-            BombModule.HandlePass();
+            if (Maze[yourY, yourX].Contains('R'))
+            {
+                BombModule.HandleStrike();
+                Squares[yourY * 6 + yourX].SetActive(true);
+                Triangles[goalY * 6 + goalX].SetActive(true);
+
+            }
+            else
+            {
+                yourX++;
+            }
+            if (yourX == goalX && yourY == goalY)
+            {
+                Audio.PlaySoundAtTransform("pew", transform);
+                _isSolved = true;
+                BombModule.HandlePass();
+            }
         }
     }
     private void ReleaseMaze()
