@@ -22,6 +22,7 @@ public class backdoorKeypadScript : MonoBehaviour
     public Sprite[] Labels;
 
     private bool stage1, completeStage1, stage2;
+    private bool update1, update2, solveUpdate;
     private int stage1Counter;
     private static int moduleIdCounter = 1;
     private int moduleId;
@@ -57,6 +58,9 @@ public class backdoorKeypadScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        update1 = false;
+        update2 = false;
+        solveUpdate = false;
         moduleId = moduleIdCounter++;
         _isSolved = false;
         foreach (var button in TwoXTwo)
@@ -443,7 +447,22 @@ public class backdoorKeypadScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (stage1 && !completeStage1 && !update1)
+        {
+            TwitchHelpMessage += ". The current rule seed is " + ruleSeed1;
+            update1 = true;
+        }
+        if (stage2 && !update2)
+        {
+            TwitchHelpMessage = "!{0} press <#> [Presses button '#' in reading order] | Presses are chainable with spaces";
+            TwitchHelpMessage += ". The current rule seed is " + ruleSeed2;
+            update2 = true;
+        }
+        if (_isSolved && !solveUpdate)
+        {
+            TwitchHelpMessage = "!{0} press <#> [Presses button '#' in reading order] | Presses are chainable with spaces";
+            solveUpdate = true;
+        }
     }
 
     IEnumerator TwitchHandleForcedSolve()
@@ -512,6 +531,7 @@ public class backdoorKeypadScript : MonoBehaviour
 
     IEnumerator ProcessTwitchCommand(string command)
     {
+        
         string[] parameters = command.Split(' ');
         if (parameters[0].EqualsIgnoreCase("press"))
         {
