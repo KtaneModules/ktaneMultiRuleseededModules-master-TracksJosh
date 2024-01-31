@@ -656,7 +656,7 @@ public class whiteElephantScript : MonoBehaviour {
         Presents[twitchy].OnInteract();
     }
 
-    private string TwitchHelpMessage = "!{0} elephant to press the white elephant. !{0} press <l, m, r> to press left, middle, or right present and receivers. !{0} tags to cycle between the present tags and receiver nametags. !{0} open # to open your gift at the specific time (replace # with a digit).";
+    private string TwitchHelpMessage = "!{0} elephant to press the white elephant. !{0} press <l, m, r> to press left, middle, or right present and receivers. !{0} tags to cycle between the present tags and receiver nametags. !{0} slowcycle to slowly cycle between the present tags and receiver nametags. !{0} open # to open your gift at the specific time (replace # with a digit). ";
 
     IEnumerator ProcessTwitchCommand(string command)
     {
@@ -696,8 +696,41 @@ public class whiteElephantScript : MonoBehaviour {
                 {
                     for (int i = 0; i < 3; i++)
                     {
+                        yield return null;
                         ShowName(i);
                         yield return new WaitForSecondsRealtime(1.0f);
+                        HideName(i);
+                        yield return new WaitForSecondsRealtime(0.25f);
+                    }
+                    yield break;
+                }
+                else
+                {
+                    yield return "sendtochaterror You cannot cycle any tags right now!";
+                    yield break;
+                }
+            }
+            else if (parameters[0].EqualsIgnoreCase("slowcycle"))
+            {
+                if (selectPres)
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        yield return null;
+                        ShowTag(i);
+                        yield return new WaitForSecondsRealtime(3.0f);
+                        HideTag(i);
+                        yield return new WaitForSecondsRealtime(0.25f);
+                    }
+                    yield break;
+                }
+                else if (selectRec)
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        yield return null;
+                        ShowName(i);
+                        yield return new WaitForSecondsRealtime(3.0f);
                         HideName(i);
                         yield return new WaitForSecondsRealtime(0.25f);
                     }
