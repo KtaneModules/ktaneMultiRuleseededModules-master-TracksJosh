@@ -447,14 +447,7 @@ public class newWorldScript : MonoBehaviour {
         {
             yield return "sendtochaterror You have not activated the maze yet!";
         }
-        if (twitchInput.Equals("reset") || twitchInput.Equals("press reset"))
-        {
-            yield return null;
-            yourX = saveX;
-            yourY = saveY;
-            Squares[yourY * 6 + yourX].SetActive(true);
-            Triangles[goalY * 6 + goalX].SetActive(true);
-        }
+        
 
 
         yield return null;
@@ -487,6 +480,22 @@ public class newWorldScript : MonoBehaviour {
                         break;
                 }
             }
+        }
+        if (twitchInput.Equals("reset") || twitchInput.Equals("press reset"))
+        {
+            yield return null;
+            yourX = saveX;
+            yourY = saveY;
+            for(int i = 0; i < 6; i++)
+            {
+                for(int j = 0; j < 6; j++)
+                {
+                    Squares[i * 6 + j].SetActive(false);
+                    Triangles[i * 6 + j].SetActive(false);
+                }
+            }
+            Squares[yourY * 6 + yourX].SetActive(true);
+            Triangles[goalY * 6 + goalX].SetActive(true);
         }
 
     }

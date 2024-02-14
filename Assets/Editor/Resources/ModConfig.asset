@@ -21,6 +21,6 @@ MonoBehaviour:
     Steps (simonSteps) I'm stepping away from this. Too many Simons on this trail.\nManual:
     ktane.timwi.de/HTML/Simon%20Steps.html\n\nWhite Elephant (whiteElephant) Season
     6, Episode 11. Only on Cartoon Network\u2122\nManual: ktane.timwi.de/HTML/White%20Elephant.html"
-  version: 2.002
+  version: 2.003
   outputFolder: build
   previewImage: {fileID: 2800000, guid: b3b1d3f43e30631449947bffd2a8803b, type: 3}
