@@ -71,7 +71,12 @@ public class simonStepsScript : MonoBehaviour {
         Sections[1].OnInteract += delegate { RightButton(); return false; };
         Sections[2].OnInteract += delegate { DownButton(); return false; };
         Sections[3].OnInteract += delegate { LeftButton(); return false; };
-
+        float scalar = transform.lossyScale.x;
+        foreach (Light light in Lights)
+        {
+            light.gameObject.SetActive(false);
+            light.range *= scalar * 0.005f;
+        }
         beginModule();
 
     }
@@ -88,12 +93,6 @@ public class simonStepsScript : MonoBehaviour {
             button.GetComponent<Renderer>().material = Colors[i];
             stageColors[stage][c] = i;
             c++;
-        }
-        float scalar = transform.lossyScale.x;
-        foreach(Light light in Lights)
-        {
-            light.gameObject.SetActive(false);
-            light.range *= scalar * 0.005f;
         }
         foreach (TextMesh text in Digits)
         {
