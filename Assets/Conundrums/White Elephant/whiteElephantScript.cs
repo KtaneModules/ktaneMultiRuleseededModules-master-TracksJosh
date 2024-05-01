@@ -815,16 +815,17 @@ public class whiteElephantScript : MonoBehaviour {
             {
                 if (openPres)
                 {
-                    int pressed = 0;
+                    int pressed = -1;
 
                     if (int.TryParse(parameters[1], out pressed))
                     {
-                        while (!(pressed == Mathf.FloorToInt(Bomb.GetTime() % 60) % 10))
+                        while (!(pressed == (int)(Bomb.GetTime() % 60) % 10))
                         {
                             yield return null;
                         }
                         yield return null;
                         Presents[twitchy].OnInteract();
+                        Debug.LogFormat("[White Elephant #{0}] Command: {2}; Opened: {1}", moduleId, (int)Bomb.GetTime() % 60, command);
                         yield break;
                     }
                 }
