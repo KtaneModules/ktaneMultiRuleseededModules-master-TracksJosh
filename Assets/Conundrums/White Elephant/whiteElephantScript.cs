@@ -815,10 +815,11 @@ public class whiteElephantScript : MonoBehaviour {
             {
                 if (openPres)
                 {
-                    Debug.LogFormat("[White Elephant #{0}] Version: {1}", moduleId, "2.0042");
+                    Debug.LogFormat("[White Elephant #{0}] Version: {1}", moduleId, "2.00421");
 
                     int pressed;
                     int.TryParse(parameters[1], out pressed);
+                    yield return null;
                     while (pressed != (int)Bomb.GetTime() % 60 % 10)
                     {
                         yield return null;
