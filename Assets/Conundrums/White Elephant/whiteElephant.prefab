@@ -3299,7 +3299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ModuleType: whiteElephant
   ModuleDisplayName: White Elephant
-  RequiresTimerVisibility: 0
+  RequiresTimerVisibility: 1
 --- !u!114 &114037388867170532
 MonoBehaviour:
   m_ObjectHideFlags: 1
